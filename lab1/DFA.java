@@ -49,10 +49,16 @@ public class DFA {
         //1st step: we check if last letter of the word is terminal node
         if (!checkLastLetter(word.charAt(word.length()-1))) return false;
         //2nd step: we check i-th letter corresponds to rules
-        for(int i = word.length()-2; i >= 0; i--) {
-            //System.out.println(word.charAt(i) + " " + num + " ");
-            if (!checkLetter(word.charAt(i)))
+        int i = word.length()-2;
+        while(i >= 0){
+            //System.out.println("* " + word.charAt(i) + " " + num + " ");
+            if (!checkLetterReverse(word.charAt(i))){
+                i++;
+                if(!checkLetterDirect(word.charAt(i)))
                 return false;
+            }
+
+            i--;
         }
         return true;
     }
@@ -77,5 +83,16 @@ public class DFA {
         }
         return false;
     }
-
+    
+    private boolean checkLetterDirect(char letter) {
+        for (int i = 0; i < rules.size(); i++) {
+            if (rules.get(i).length() == 5)
+                if (rules.get(i).charAt(4) == num && rules.get(i).contains(String.valueOf(letter))) {
+                    //System.out.println("//"+letter + " " + num + " ");
+                    num = rules.get(i).charAt(0);
+                    return true;
+                }
+        }
+        return false;
+    }
 }
